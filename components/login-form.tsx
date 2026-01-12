@@ -15,11 +15,22 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { use, useEffect, useState } from "react"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+  const [email, setEmail] = useState("");
+
+  const Change = (e : any) => {
+    setEmail(e.target.value);
+  }
+
+  useEffect(() => {
+    console.log(email);
+  }, [email]);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -39,6 +50,7 @@ export function LoginForm({
                   type="email"
                   placeholder="m@example.com"
                   required
+                  onChange={Change}
                 />
               </Field>
               <Field>

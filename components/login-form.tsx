@@ -67,9 +67,6 @@ export function LoginForm({
               </Field>
               <Field>
                 <Button type="submit" onClick={() => {document.location.href = "/otp"}}>Login</Button>
-                <Button variant="outline" type="button">
-                  Login with Google
-                </Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <a href="#">Sign up</a>
                 </FieldDescription>

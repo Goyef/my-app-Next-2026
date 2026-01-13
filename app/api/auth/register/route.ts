@@ -40,6 +40,5 @@ export async function POST(req: NextRequest) {
         console.log(e)
         return Response.json({error: true, message: "error", code: "E02"})
     }
-    return Response.json("Hello World!");
 
 }

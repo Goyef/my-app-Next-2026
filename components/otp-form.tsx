@@ -47,7 +47,7 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
         setError(data.message)
       } else {
         // Redirection vers le dashboard après vérification
-        window.location.href = "/dashboard"
+        window.location.href = "/login"
       }
     } catch (err) {
       setError("Une erreur est survenue")
@@ -125,7 +125,7 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
               )}
             </Field>
             <FieldGroup>
-              <Button type="submit" onClick={() => {document.location.href = "/landing-page"}}>Verify</Button>
+              <Button type="submit">Verify</Button>
               <FieldDescription className="text-center">
                 Didn&apos;t receive the code?{" "}
                 <button 

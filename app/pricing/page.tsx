@@ -21,8 +21,7 @@ type PricingCardProps = {
   actionLabel: string
   popular?: boolean
   exclusive?: boolean
-  priceidMonthly?: string
-  userId?: string
+  priceId?: string
 }
 
 const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
@@ -46,7 +45,7 @@ const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
   </Tabs>
 )
 
-const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, actionLabel, popular, exclusive }: PricingCardProps) => (
+const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, actionLabel, popular, exclusive, priceId }: PricingCardProps) => (
   <Card
     className={cn(`w-72 flex flex-col justify-between py-1 ${popular ? "border-rose-400" : "border-zinc-700"} mx-auto sm:mx-0`, {
       "animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-size-[200%_100%] transition-colors":
@@ -80,10 +79,14 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
       </CardContent>
     </div>
     <CardFooter className="mt-2">
-      <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-        <div className="absolute -inset-0.5 -z-10 rounded-lg bg-linear-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
-        {actionLabel}
-      </Button>
+      {priceId ? (
+        <CheckoutButton priceId={priceId} />
+      ) : (
+        <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+          <div className="absolute -inset-0.5 -z-10 rounded-lg bg-linear-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
+          {actionLabel}
+        </Button>
+      )}
     </CardFooter>
   </Card>
 )
@@ -107,6 +110,7 @@ export default function page() {
       description: "Fonctionnalités essentielles pour commencer",
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3"],
       actionLabel: "Commencez",
+      priceId: "price_1SpS5LFXIS2IIz5emWEx1QxS", 
     },
     {
       title: "Premium",
@@ -116,6 +120,7 @@ export default function page() {
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3"],
       actionLabel: "Commencez",
       popular: true,
+      priceId: "price_1SpS6KFXIS2IIz5e3wmLjhWp", 
     },
     {
       title: "Entreprise",
@@ -124,6 +129,7 @@ export default function page() {
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3", "Super Exclusive Feature"],
       actionLabel: "Contactez nous",
       exclusive: true,
+      // Pas de priceId pour Entreprise (contact sales)
     },
   ]
   return (

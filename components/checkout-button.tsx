@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 interface CheckoutButtonProps {
   priceId: string;
-  userId: string;
+  userId?: string;
 }
 
 export function CheckoutButton({ priceId, userId }: CheckoutButtonProps) {

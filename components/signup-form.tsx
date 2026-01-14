@@ -70,7 +70,6 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
 
       console.log("[SignupForm] received response", response)
 
-      // Try to parse JSON even when response is not ok to get error details
       let result: any = null
       try {
         result = await response.json()
@@ -92,7 +91,6 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       const data = result
 
       if (data?.error) {
-        // server can return an errors array or a message
         if (Array.isArray(data.errors)) {
           setError(data.errors.map((e: any) => e.message).join(', '))
         } else {
@@ -108,10 +106,9 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
           password: "",
           confirmPassword: "",
         })
-        // redirect to login after short delay
         setTimeout(() => {
-          window.location.href = "/login"
-        }, 700)
+          window.location.href = "/otp?email=" + encodeURIComponent(formData.email)
+        }, 500)
       }
     } catch (err) {
       console.error("[SignupForm] fetch error", err)

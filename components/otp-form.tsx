@@ -125,9 +125,7 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
               )}
             </Field>
             <FieldGroup>
-              <Button type="submit" disabled={loading || otp.length !== 6}>
-                {loading ? "Verifying..." : "Verify"}
-              </Button>
+              <Button type="submit" onClick={() => {document.location.href = "/landing-page"}}>Verify</Button>
               <FieldDescription className="text-center">
                 Didn&apos;t receive the code?{" "}
                 <button 

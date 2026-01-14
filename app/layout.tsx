@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
   <html lang="fr" suppressHydrationWarning={true}>
       <body className={inter.className}>
-        {children}
+        {/* {children} */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <nav className="pt-2 px-4 flex justify-end">
             <ModeToggle />

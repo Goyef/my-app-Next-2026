@@ -46,7 +46,7 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
               </FieldDescription>
             </Field>
             <FieldGroup>
-              <Button type="submit" onClick={() => {document.location.href = "/dashboard"}}>Verify</Button>
+              <Button type="submit" onClick={() => {document.location.href = "/landing-page"}}>Verify</Button>
               <FieldDescription className="text-center">
                 Didn&apos;t receive the code? <a href="#">Resend</a>
               </FieldDescription>

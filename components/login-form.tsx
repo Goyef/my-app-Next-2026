@@ -82,6 +82,7 @@ export function LoginForm({
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <a
+                  //direction vers la page forget password
                     href="#"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >

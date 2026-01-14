@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const ps: string | undefined = await ArgonHash(password);
 
     if (ps === "false" || !ps) {
-      return NextResponse.json({ error: true, message: "Password hashing failed", code: "E02" }, { status: 500 });
+      return NextResponse.json({ error: true, message: "Le hashage du mot de passe a échoué", code: "E02" }, { status: 500 });
     }
 
     const user = await prisma.user.create({
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (e) {
-    console.log("register error:", e);
+    console.log("erreur d'enregistrement:", e);
     const message = e instanceof Error ? e.message : "Internal server error";
     return NextResponse.json({ error: true, message }, { status: 500 });
   }

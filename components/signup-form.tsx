@@ -45,7 +45,16 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     setError(null)
     setLoading(true)
 
+    console.log("[SignupForm] handleSubmit called", formData)
+
+    if (formData.password !== formData.confirmPassword) {
+        setError("Les mots de passe ne correspondent pas.")
+        setLoading(false)
+        return;
+    }
+
     try {
+      console.log("[SignupForm] sending POST to /api/auth/register")
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -56,14 +65,39 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
           lastname: formData.lastname,
           email: formData.email,
           password: formData.password,
-          confirmPassword: formData.confirmPassword,
-        }),
+          }),
       })
 
-      const data = await response.json()
+      console.log("[SignupForm] received response", response)
 
-      if (data.error) {
-        setError(Array.isArray(data) ? data.join(", ") : data.message || "Registration failed")
+      // Try to parse JSON even when response is not ok to get error details
+      let result: any = null
+      try {
+        result = await response.json()
+      } catch (e) {
+        result = { message: await response.text().catch(() => "<non-json response>") }
+      }
+
+      if (!response.ok) {
+        console.error("[SignupForm] server responded with error", response.status, result)
+        if (Array.isArray(result)) {
+          setError(result.map((r: any) => r.message || JSON.stringify(r)).join(', '))
+        } else {
+          setError(result?.message || `Server error ${response.status}`)
+        }
+        setSuccess(false)
+        return
+      }
+
+      const data = result
+
+      if (data?.error) {
+        // server can return an errors array or a message
+        if (Array.isArray(data.errors)) {
+          setError(data.errors.map((e: any) => e.message).join(', '))
+        } else {
+          setError(data.message || "Échec de l'inscription")
+        }
         setSuccess(false)
       } else {
         setSuccess(true)
@@ -74,12 +108,14 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
           password: "",
           confirmPassword: "",
         })
+        // redirect to login after short delay
         setTimeout(() => {
           window.location.href = "/login"
-        }, 500)
+        }, 700)
       }
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      console.error("[SignupForm] fetch error", err)
+      setError("Une erreur est survenue. Veuillez réessayer.")
       setSuccess(false)
     } finally {
       setLoading(false)
@@ -177,7 +213,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 </Button>
        
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="/login">Sign in</a>
+                  Already have an account? <a href="/otp">Sign in</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

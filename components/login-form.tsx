@@ -66,9 +66,9 @@ export function LoginForm({
                 <Input id="password" type="password" required />
               </Field>
               <Field>
-                <Button type="submit" onClick={() => {document.location.href = "/otp"}}>Login</Button>
+                <Button type="submit" onClick={() => {document.location.href = "#"}}>Login</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="#">Sign up</a>
+                  Don&apos;t have an account? <a href="/signup">Sign up</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

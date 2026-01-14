@@ -1,44 +1,48 @@
 import { IRegister } from "@/app/interfaces/user";
 import { MRegister } from "@/app/middleware/register";
 import type { NextRequest } from "next/server";
-import {prisma} from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { ArgonHash } from "@/lib/argon2i";
 
 export async function POST(req: NextRequest) {
+  const { firstname, lastname, email, password, confirmPassword }: IRegister = await req.json();
 
-    const {firstname, lastname, email, password, confirmPassword} : IRegister = await req.json()
+  const middle = MRegister({ firstname, lastname, email, password, confirmPassword });
 
-    const middle = MRegister({firstname, lastname, email, password, confirmPassword})
+  if (middle.length > 0) {
+    return NextResponse.json({ error: true, errors: middle }, { status: 400 });
+  }
 
-    if (middle.length > 0) {
-        return Response.json(middle)
+  try {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
+      return NextResponse.json({ error: true, message: "L'Email est déjà utilisé" }, { status: 409 });
     }
 
-    try {
-        const ps: string | undefined = await ArgonHash(password);
+    const ps: string | undefined = await ArgonHash(password);
 
-        if (ps === "false") {
-            return Response.json({error: true, message: "error message", code: "E02"})
-        }
-         await prisma.user.create({
-          data: {
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            password: ps as string,
-        },
+    if (ps === "false" || !ps) {
+      return NextResponse.json({ error: true, message: "Password hashing failed", code: "E02" }, { status: 500 });
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        firstname,
+        lastname,
+        email,
+        password: ps,
+      },
     });
 
-    return Response.json({error: false, data: {
-        firstname: firstname, 
-        lastname: lastname, 
-        email: email, 
-        password: ps as string}})
-
-        
-    } catch (e) {
-        console.log(e)
-        return Response.json({error: true, message: "error", code: "E02"})
-    }
-
+    return NextResponse.json(
+      { error: false, data: { id_user: user.id_user, firstname: user.firstname, lastname: user.lastname, email: user.email } },
+      { status: 201 }
+    );
+  } catch (e) {
+    console.log("register error:", e);
+    const message = e instanceof Error ? e.message : "Internal server error";
+    return NextResponse.json({ error: true, message }, { status: 500 });
+  }
 }
+

@@ -15,22 +15,46 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { use, useEffect, useState } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter()
 
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const Change = (e : any) => {
-    setEmail(e.target.value);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok || data.error) {
+        setError(data.message || 'Login failed')
+      } else {
+        router.push('/landing-page')
+      }
+    } catch (err) {
+      setError('Network error')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -41,7 +65,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -50,7 +74,8 @@ export function LoginForm({
                   type="email"
                   placeholder="m@example.com"
                   required
-                  onChange={Change}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>
               <Field>
@@ -63,10 +88,17 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               </Field>
+
+              {error && (
+                <Field>
+                  <FieldDescription className="text-center text-destructive">{error}</FieldDescription>
+                </Field>
+              )}
+
               <Field>
-                <Button type="submit" onClick={() => {document.location.href = "#"}}>Login</Button>
+                <Button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</Button>
                 <FieldDescription className="text-center">
                   Don&apos;t have an account? <a href="/signup">Sign up</a>
                 </FieldDescription>

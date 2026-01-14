@@ -3,15 +3,18 @@ import { ILogin } from "@/app/interfaces/user";
 export const MLogin = (user : ILogin) => {
     const {email, password} = user
 
-    const a = []
+    const errors: any[] = []
 
-    if (email.length >= 2 && email.length <=20) {
-        a.push({error: true, message: "Email is not correct", code: "101"})
-    }
-  
-    if (password.length >= 2 && password.length <=20) {
-        a.push({error: true, message: "Password is not correct", code: "101"})
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email || typeof email !== 'string' || email.length < 3 || email.length > 255 || !emailRegex.test(email)) {
+        errors.push({error: true, message: "L'email n'est pas correct", code: "V01"})
     }
 
-    return a;
-}
+    // Basic password validation
+    if (!password || typeof password !== 'string' || password.length < 8 || password.length > 128) {
+        errors.push({error: true, message: "Mot de passe incorrect (min 8 caractères)", code: "V02"})
+    }
+
+    return errors;
+} 

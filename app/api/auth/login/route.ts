@@ -1,8 +1,8 @@
 import { ILogin } from "@/app/interfaces/user";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ArgonVerify } from "@/lib/argon2i";
-import { MLogin } from "@/app/middleware/login";
+import { MLogin } from "@/app/middleware/login"; 
 
 export async function POST(req: NextRequest) {
     const { email, password }: ILogin = await req.json()
@@ -13,11 +13,11 @@ export async function POST(req: NextRequest) {
 
     if (middle.length > 0) {
         console.log("❌ Validation errors:", middle)
-        return Response.json(middle)
-    }
+        return NextResponse.json({ error: true, errors: middle }, { status: 400 })
+    } 
 
     try {
-        console.log("🔎 Looking for user with email:", email)
+        console.log("🔎 Recherche d'une adresse email valid:", email)
         const user = await prisma.user.findFirst({
             where: {
                 email: email,
@@ -25,37 +25,42 @@ export async function POST(req: NextRequest) {
         })
 
         if (!user) {
-            console.log("User not found")
-            return Response.json({ error: true, message: "Invalid email or password", code: "E01" })
-        }
+            console.log("Utilisateur non trouvé")
+            return NextResponse.json({ error: true, message: "Adresse email ou mot de passe incorrect", code: "E01" }, { status: 401 })
+        } 
 
-        console.log("User found:", user.email)
+        console.log("Utilisateur trouvé:", user.email)
 
-        console.log("Verifying password...")
+        if (!user.IsActive) {
+            console.log("Le compte utilisateur n'est pas actif")
+            return NextResponse.json({ error: true, message: "Le compte utilisateur n'est pas actif", code: "E03" }, { status: 403 })
+        } 
+
+        console.log("Vérification du mot de passe...")
         const isPasswordValid = await ArgonVerify(user.password, password)
 
         if (!isPasswordValid) {
-            console.log("Password verification failed")
-            return Response.json({ error: true, message: "Invalid email or password", code: "E02" })
-        }
+            console.log("Verification du mot de passe échouée")
+            return NextResponse.json({ error: true, message: "Adresse email ou mot de passe incorrect", code: "E02" }, { status: 401 })
+        } 
 
-        console.log("Password verified successfully")
-        console.log(" Login successful for user:", user.email)
+        console.log("Mot de passe vérifié avec succès")
+        console.log("Connexion réussie pour l'utilisateur:", user.email)
 
-        return Response.json({
+        return NextResponse.json({
             error: false,
-            message: "Login successful",
+            message: "Connexion réussie",
             data: {
                 id: user.id_user,
                 email: user.email,
                 firstname: user.firstname,
                 lastname: user.lastname,
             }
-        })
+        }, { status: 200 }) 
 
     } catch (e) {
         console.error("Login error:", e)
-        return Response.json({ error: true, message: "An error occurred during login", code: "E02" })
-    }
+        return NextResponse.json({ error: true, message: "An error occurred during login", code: "E99" }, { status: 500 })
+    } 
 
 }

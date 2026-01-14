@@ -59,10 +59,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // OTP valide - nettoyer l'OTP de la base
+    // OTP valide - nettoyer l'OTP de la base et activer le compte
     await prisma.user.update({
       where: { email },
-      data: { otp: null, otpExpiry: null },
+      data: { 
+        otp: null, 
+        otpExpiry: null,
+        IsActive: true,
+      },
     });
 
     // TODO: Créer une session ou un token JWT ici

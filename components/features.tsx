@@ -15,7 +15,7 @@ export default function Features() {
       description: "Fonctionnalités essentielles pour commencer",
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3"],
       actionLabel: "Voir plus",
-      actionUrl: "/login",
+      actionUrl: "/pricing",
     },
     {
       title: "Premium",
@@ -23,7 +23,7 @@ export default function Features() {
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3"],
       actionLabel: "Voir plus",
       popular: true,
-      actionUrl: "/login",
+      actionUrl: "/pricing",
     },
     {
       title: "Entreprise",
@@ -31,7 +31,7 @@ export default function Features() {
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3", "Super Exclusive Feature"],
       actionLabel: "Voir plus",
       exclusive: true,
-      actionUrl: "/login",
+      actionUrl: "/pricing",
     },
   ]
   return (

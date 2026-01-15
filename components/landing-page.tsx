@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
@@ -18,6 +19,7 @@ type PricingCardProps = {
   description: string
   features: string[]
   actionLabel: string
+  actionUrl?: string
   popular?: boolean
   exclusive?: boolean
 }
@@ -43,7 +45,7 @@ export const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
   </Tabs>
 )
 
-export const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, actionLabel, popular, exclusive }: PricingCardProps) => (
+export const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, actionLabel, actionUrl, popular, exclusive }: PricingCardProps) => (
   <Card
     className={cn(`w-72 flex flex-col justify-between py-1 ${popular ? "border-rose-400" : "border-zinc-700"} mx-auto sm:mx-0`, {
       "animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors":
@@ -77,10 +79,12 @@ export const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, descri
       </CardContent>
     </div>
     <CardFooter className="mt-2">
-      <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-        <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
-        {actionLabel}
-      </Button>
+      <Link href={actionUrl || "#"} className="w-full">
+        <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+          <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
+          {actionLabel}
+        </Button>
+      </Link>
     </CardFooter>
   </Card>
 )
@@ -91,4 +95,3 @@ export const CheckItem = ({ text }: { text: string }) => (
     <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">{text}</p>
   </div>
 )
- 

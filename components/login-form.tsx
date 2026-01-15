@@ -59,9 +59,9 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Connectez vous à votre compte</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Entrez votre email ci-dessous pour vous connecter à votre compte
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -80,12 +80,12 @@ export function LoginForm({
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
                   <a
                     href="#"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
-                    Forgot your password?
+                    Mot de passe oublié?
                   </a>
                 </div>
                 <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -98,9 +98,9 @@ export function LoginForm({
               )}
 
               <Field>
-                <Button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</Button>
+                <Button type="submit" disabled={loading}>{loading ? 'Connexion en cours...' : 'Se connecter'}</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="/signup">Sign up</a>
+                  Vous n'avez pas de compte? <a href="/signup">S'inscrire</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

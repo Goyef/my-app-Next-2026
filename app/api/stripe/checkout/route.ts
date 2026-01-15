@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       // URLs de redirection
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}&userId=${userId}`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
       // Métadonnées pour identifier l'utilisateur
       metadata: {

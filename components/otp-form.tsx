@@ -83,8 +83,8 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
     return (
       <Card {...props}>
         <CardHeader>
-          <CardTitle>Error</CardTitle>
-          <CardDescription>Email not found. Please go back and try again.</CardDescription>
+          <CardTitle>Erreur</CardTitle>
+          <CardDescription>Email non trouvé. Veuillez revenir en arrière et réessayer.</CardDescription>
         </CardHeader>
       </Card>
     )
@@ -93,14 +93,14 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Enter verification code</CardTitle>
-        <CardDescription>We sent a 6-digit code to {email}</CardDescription>
+        <CardTitle>Entrez le code de vérification</CardTitle>
+        <CardDescription>Nous avons envoyé un code à 6 chiffres à {email}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleVerify}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="otp">Verification code</FieldLabel>
+              <FieldLabel htmlFor="otp">Code de vérification</FieldLabel>
               <InputOTP 
                 maxLength={6} 
                 id="otp" 
@@ -118,23 +118,23 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
                 </InputOTPGroup>
               </InputOTP>
               <FieldDescription>
-                Enter the 6-digit code sent to your email.
+                Entrez le code à 6 chiffres envoyé à votre email.
               </FieldDescription>
               {error && (
                 <p className="text-sm text-red-500 mt-2">{error}</p>
               )}
             </Field>
             <FieldGroup>
-              <Button type="submit">Verify</Button>
+              <Button type="submit" onClick={() => {document.location.href = "/landing-page"}}>Vérifier</Button>
               <FieldDescription className="text-center">
-                Didn&apos;t receive the code?{" "}
+                Vous n'avez pas reçu le code?{" "}
                 <button 
                   type="button"
                   onClick={handleResend}
                   disabled={resending}
                   className="text-primary underline hover:no-underline disabled:opacity-50"
                 >
-                  {resending ? "Sending..." : "Resend"}
+                  {resending ? "Envoie..." : "Renvoyer"}
                 </button>
               </FieldDescription>
             </FieldGroup>

@@ -15,53 +15,20 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useLogin } from "@/hooks/use-login"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const router = useRouter()
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok || data.error) {
-        setError(data.message || 'Login failed')
-      } else {
-        router.push('/landing-page')
-      }
-    } catch (err) {
-      setError('Network error')
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  const { email, setEmail, handleSubmit, password, setPassword, loading, error } = useLogin()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Connectez vous à votre compte</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Entrez votre email ci-dessous pour vous connecter à votre compte
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -80,13 +47,13 @@ export function LoginForm({
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
                   <a
            
                     href="/forgotPassword"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
-                    Forgot your password?
+                    Mot de passe oublié?
                   </a>
                 </div>
                 <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -99,9 +66,9 @@ export function LoginForm({
               )}
 
               <Field>
-                <Button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</Button>
+                <Button type="submit" disabled={loading}>{loading ? 'Connexion en cours...' : 'Se connecter'}</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="/signup">Sign up</a>
+                  Vous n'avez pas de compte? <a href="/signup">S'inscrire</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

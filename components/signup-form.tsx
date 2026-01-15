@@ -79,10 +79,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
 
       if (!response.ok) {
         console.error("[SignupForm] server responded with error", response.status, result)
-        if (Array.isArray(result)) {
-          setError(result.map((r: any) => r.message || JSON.stringify(r)).join(', '))
+        if (result?.errors && Array.isArray(result.errors)) {
+          setError(result.errors.map((e: any) => e.message).join(', '))
+        } else if (result?.message) {
+          setError(result.message)
         } else {
-          setError(result?.message || `Server error ${response.status}`)
+          setError(`Erreur serveur ${response.status}`)
         }
         setSuccess(false)
         return

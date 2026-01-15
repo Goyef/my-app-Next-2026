@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User'
+  User: 'User',
+  Subscription: 'Subscription'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -78,10 +79,23 @@ export const UserScalarFieldEnum = {
   password: 'password',
   IsActive: 'IsActive',
   otp: 'otp',
-  otpExpiry: 'otpExpiry'
+  otpExpiry: 'otpExpiry',
+  resetToken: 'resetToken',
+  resetTokenExpiry: 'resetTokenExpiry'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id_subscription: 'id_subscription',
+  id_user: 'id_user',
+  plan: 'plan',
+  start_date: 'start_date',
+  end_date: 'end_date'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
 
 
 export const SortOrder = {

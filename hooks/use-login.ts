@@ -1,10 +1,12 @@
 "use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useUser } from "@/hooks/use-user"
 
 export function useLogin() {
 
     const router = useRouter()
+    const { setUser } = useUser()
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -28,6 +30,12 @@ export function useLogin() {
             if (!res.ok || data.error) {
                 setError(data.message || 'Login failed')
             } else {
+                setUser({
+                    id: data.data.id,
+                    email: data.data.email,
+                    firstname: data.data.firstname,
+                    lastname: data.data.lastname,
+                })
                 router.push('/landing-page')
             }
         } catch (err) {

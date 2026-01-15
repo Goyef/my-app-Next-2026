@@ -24,6 +24,8 @@ model User {
 
   otp       String?
   otpExpiry DateTime?
+  resetToken String?
+  resetTokenExpiry DateTime?
   subscriptions Subscription[]
 }
 

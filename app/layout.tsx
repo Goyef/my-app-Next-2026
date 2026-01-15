@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModeToggle } from "@/components/theme-toggler"
+import { UserProvider } from "@/hooks/use-user"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,10 +23,12 @@ export default function RootLayout({
       <body className={inter.className}>
         {/* {children} */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <nav className="pt-2 px-4 flex justify-end">
-            <ModeToggle />
-          </nav>
-          {children}
+          <UserProvider>
+            <nav className="pt-2 px-4 flex justify-end">
+              <ModeToggle />
+            </nav>
+            {children}
+          </UserProvider>
         </ThemeProvider>
       </body>
     </html>

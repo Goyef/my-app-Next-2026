@@ -220,6 +220,8 @@ export type UserWhereInput = {
   IsActive?: Prisma.BoolFilter<"User"> | boolean
   otp?: Prisma.StringNullableFilter<"User"> | string | null
   otpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  resetToken?: Prisma.StringNullableFilter<"User"> | string | null
+  resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
 }
 
@@ -232,6 +234,8 @@ export type UserOrderByWithRelationInput = {
   IsActive?: Prisma.SortOrder
   otp?: Prisma.SortOrderInput | Prisma.SortOrder
   otpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
 }
 
@@ -247,6 +251,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   IsActive?: Prisma.BoolFilter<"User"> | boolean
   otp?: Prisma.StringNullableFilter<"User"> | string | null
   otpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  resetToken?: Prisma.StringNullableFilter<"User"> | string | null
+  resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
 }, "id_user" | "email">
 
@@ -291,6 +297,8 @@ export type UserCreateInput = {
   IsActive?: boolean
   otp?: string | null
   otpExpiry?: Date | string | null
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
@@ -303,6 +311,8 @@ export type UserUncheckedCreateInput = {
   IsActive?: boolean
   otp?: string | null
   otpExpiry?: Date | string | null
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -315,6 +325,8 @@ export type UserUpdateInput = {
   IsActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   otp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
@@ -327,6 +339,8 @@ export type UserUncheckedUpdateInput = {
   IsActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   otp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -413,11 +427,6 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -457,6 +466,8 @@ export type UserCreateWithoutSubscriptionsInput = {
   IsActive?: boolean
   otp?: string | null
   otpExpiry?: Date | string | null
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -468,6 +479,8 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   IsActive?: boolean
   otp?: string | null
   otpExpiry?: Date | string | null
+  resetToken?: string | null
+  resetTokenExpiry?: Date | string | null
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -495,6 +508,8 @@ export type UserUpdateWithoutSubscriptionsInput = {
   IsActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   otp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -506,6 +521,8 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   IsActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   otp?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -548,6 +565,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   IsActive?: boolean
   otp?: boolean
   otpExpiry?: boolean
+  resetToken?: boolean
+  resetTokenExpiry?: boolean
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -591,7 +610,7 @@ export type UserSelectScalar = {
   resetTokenExpiry?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_user" | "firstname" | "lastname" | "email" | "password" | "IsActive" | "otp" | "otpExpiry", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_user" | "firstname" | "lastname" | "email" | "password" | "IsActive" | "otp" | "otpExpiry" | "resetToken" | "resetTokenExpiry", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>

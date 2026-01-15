@@ -1,6 +1,6 @@
 import { resend } from '@/lib/resend';
 import { prisma } from '@/lib/prisma';
-import OTPEmail from '@/app/emails/otp';
+import OTPEmail from '@/components/emails/otp';
 import type { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {

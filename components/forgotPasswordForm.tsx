@@ -10,11 +10,30 @@ export default function ForgotPasswordForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simuler un appel API
-    setTimeout(() => {
+    setMessage({ type: null, text: '' });
+
+    try {
+      const response = await fetch('/api/auth/password-forgot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        setMessage({ type: 'error', text: data.message });
+      } else {
+        setMessage({ type: 'success', text: 'Un email de réinitialisation a été envoyé si ce compte existe.' });
+        setEmail('');
+      }
+    } catch (error) {
+      setMessage({ type: 'error', text: 'Une erreur est survenue. Veuillez réessayer.' });
+    } finally {
       setIsLoading(false);
-      setMessage({ type: 'success', text: 'Un email de réinitialisation a été envoyé à ' + email });
-    }, 1500);
+    }
   };
 
   return (

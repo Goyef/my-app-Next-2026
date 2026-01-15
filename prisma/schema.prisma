@@ -24,5 +24,16 @@ model User {
 
   otp       String?
   otpExpiry DateTime?
+  subscriptions Subscription[]
 }
 
+model Subscription {
+  id_subscription String   @id @default(cuid())
+  id_user         String
+  plan            String
+  start_date      DateTime @default(now())
+  end_date        DateTime
+
+  user          User       @relation(fields: [id_user], references: [id_user], onDelete: Cascade)
+
+}

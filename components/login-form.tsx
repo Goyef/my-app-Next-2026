@@ -15,46 +15,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useLogin } from "@/hooks/use-login"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const router = useRouter()
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok || data.error) {
-        setError(data.message || 'Login failed')
-      } else {
-        router.push('/landing-page')
-      }
-    } catch (err) {
-      setError('Network error')
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  const { email, setEmail, handleSubmit, password, setPassword, loading, error } = useLogin()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>

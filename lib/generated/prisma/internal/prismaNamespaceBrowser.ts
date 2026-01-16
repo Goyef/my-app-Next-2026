@@ -81,7 +81,8 @@ export const UserScalarFieldEnum = {
   otp: 'otp',
   otpExpiry: 'otpExpiry',
   resetToken: 'resetToken',
-  resetTokenExpiry: 'resetTokenExpiry'
+  resetTokenExpiry: 'resetTokenExpiry',
+  stripe_customer_id: 'stripe_customer_id'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

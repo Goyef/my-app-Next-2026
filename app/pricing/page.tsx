@@ -2,11 +2,12 @@
 import { CheckoutButton } from '@/components/checkout-button';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2 } from "lucide-react"
+import { ArrowLeft, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { cn } from "@/lib/utils"
 import { ProtectedRoute } from "@/components/protected-route"
+import Link from 'next/link';
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void
@@ -37,10 +38,7 @@ const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
   <Tabs defaultValue="0" className="w-40 mx-auto" onValueChange={onSwitch}>
     <TabsList className="py-6 px-2">
       <TabsTrigger value="0" className="text-base">
-        Monthly
-      </TabsTrigger>
-      <TabsTrigger value="1" className="text-base">
-        Yearly
+        Par mois
       </TabsTrigger>
     </TabsList>
   </Tabs>
@@ -128,7 +126,7 @@ export default function page() {
       price: "Customisable",
       description: "Des solutions sur mesure pour les grandes entreprises",
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3", "Super Exclusive Feature"],
-      actionLabel: "Contactez nous",
+      actionLabel: "En cours de développement",
       exclusive: true,
       // Pas de priceId pour Entreprise (contact sales)
     },
@@ -136,6 +134,12 @@ export default function page() {
   return (
     <ProtectedRoute>
       <div className="py-8">
+          <Button variant="ghost" size="sm" asChild className="mb-4">
+              <Link href="/landing-page">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour à l'accueil
+              </Link>
+            </Button>
         <PricingHeader title="Abonnements" subtitle="Choisissez votre abonnement" />
         <PricingSwitch onSwitch={togglePricingPeriod} />
         <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">

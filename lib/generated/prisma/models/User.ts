@@ -35,6 +35,7 @@ export type UserMinAggregateOutputType = {
   otpExpiry: Date | null
   resetToken: string | null
   resetTokenExpiry: Date | null
+  stripe_customer_id: string | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -48,6 +49,7 @@ export type UserMaxAggregateOutputType = {
   otpExpiry: Date | null
   resetToken: string | null
   resetTokenExpiry: Date | null
+  stripe_customer_id: string | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -61,6 +63,7 @@ export type UserCountAggregateOutputType = {
   otpExpiry: number
   resetToken: number
   resetTokenExpiry: number
+  stripe_customer_id: number
   _all: number
 }
 
@@ -76,6 +79,7 @@ export type UserMinAggregateInputType = {
   otpExpiry?: true
   resetToken?: true
   resetTokenExpiry?: true
+  stripe_customer_id?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -89,6 +93,7 @@ export type UserMaxAggregateInputType = {
   otpExpiry?: true
   resetToken?: true
   resetTokenExpiry?: true
+  stripe_customer_id?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -102,6 +107,7 @@ export type UserCountAggregateInputType = {
   otpExpiry?: true
   resetToken?: true
   resetTokenExpiry?: true
+  stripe_customer_id?: true
   _all?: true
 }
 
@@ -188,6 +194,7 @@ export type UserGroupByOutputType = {
   otpExpiry: Date | null
   resetToken: string | null
   resetTokenExpiry: Date | null
+  stripe_customer_id: string | null
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -222,6 +229,7 @@ export type UserWhereInput = {
   otpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   resetToken?: Prisma.StringNullableFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  stripe_customer_id?: Prisma.StringNullableFilter<"User"> | string | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
 }
 
@@ -236,12 +244,14 @@ export type UserOrderByWithRelationInput = {
   otpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripe_customer_id?: Prisma.SortOrderInput | Prisma.SortOrder
   subscriptions?: Prisma.SubscriptionOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id_user?: string
   email?: string
+  stripe_customer_id?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -254,7 +264,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   resetToken?: Prisma.StringNullableFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   subscriptions?: Prisma.SubscriptionListRelationFilter
-}, "id_user" | "email">
+}, "id_user" | "email" | "stripe_customer_id">
 
 export type UserOrderByWithAggregationInput = {
   id_user?: Prisma.SortOrder
@@ -267,6 +277,7 @@ export type UserOrderByWithAggregationInput = {
   otpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  stripe_customer_id?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -286,6 +297,7 @@ export type UserScalarWhereWithAggregatesInput = {
   otpExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   resetToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   resetTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  stripe_customer_id?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
 }
 
 export type UserCreateInput = {
@@ -299,6 +311,7 @@ export type UserCreateInput = {
   otpExpiry?: Date | string | null
   resetToken?: string | null
   resetTokenExpiry?: Date | string | null
+  stripe_customer_id?: string | null
   subscriptions?: Prisma.SubscriptionCreateNestedManyWithoutUserInput
 }
 
@@ -313,6 +326,7 @@ export type UserUncheckedCreateInput = {
   otpExpiry?: Date | string | null
   resetToken?: string | null
   resetTokenExpiry?: Date | string | null
+  stripe_customer_id?: string | null
   subscriptions?: Prisma.SubscriptionUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -327,6 +341,7 @@ export type UserUpdateInput = {
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripe_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptions?: Prisma.SubscriptionUpdateManyWithoutUserNestedInput
 }
 
@@ -341,6 +356,7 @@ export type UserUncheckedUpdateInput = {
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripe_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptions?: Prisma.SubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -355,6 +371,7 @@ export type UserCreateManyInput = {
   otpExpiry?: Date | string | null
   resetToken?: string | null
   resetTokenExpiry?: Date | string | null
+  stripe_customer_id?: string | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -368,6 +385,7 @@ export type UserUpdateManyMutationInput = {
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripe_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -381,6 +399,7 @@ export type UserUncheckedUpdateManyInput = {
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripe_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -394,6 +413,7 @@ export type UserCountOrderByAggregateInput = {
   otpExpiry?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrder
+  stripe_customer_id?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -407,6 +427,7 @@ export type UserMaxOrderByAggregateInput = {
   otpExpiry?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrder
+  stripe_customer_id?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -420,6 +441,7 @@ export type UserMinOrderByAggregateInput = {
   otpExpiry?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
   resetTokenExpiry?: Prisma.SortOrder
+  stripe_customer_id?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -468,6 +490,7 @@ export type UserCreateWithoutSubscriptionsInput = {
   otpExpiry?: Date | string | null
   resetToken?: string | null
   resetTokenExpiry?: Date | string | null
+  stripe_customer_id?: string | null
 }
 
 export type UserUncheckedCreateWithoutSubscriptionsInput = {
@@ -481,6 +504,7 @@ export type UserUncheckedCreateWithoutSubscriptionsInput = {
   otpExpiry?: Date | string | null
   resetToken?: string | null
   resetTokenExpiry?: Date | string | null
+  stripe_customer_id?: string | null
 }
 
 export type UserCreateOrConnectWithoutSubscriptionsInput = {
@@ -510,6 +534,7 @@ export type UserUpdateWithoutSubscriptionsInput = {
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripe_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateWithoutSubscriptionsInput = {
@@ -523,6 +548,7 @@ export type UserUncheckedUpdateWithoutSubscriptionsInput = {
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resetTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  stripe_customer_id?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -567,6 +593,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   otpExpiry?: boolean
   resetToken?: boolean
   resetTokenExpiry?: boolean
+  stripe_customer_id?: boolean
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -582,6 +609,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   otpExpiry?: boolean
   resetToken?: boolean
   resetTokenExpiry?: boolean
+  stripe_customer_id?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -595,6 +623,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   otpExpiry?: boolean
   resetToken?: boolean
   resetTokenExpiry?: boolean
+  stripe_customer_id?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -608,9 +637,10 @@ export type UserSelectScalar = {
   otpExpiry?: boolean
   resetToken?: boolean
   resetTokenExpiry?: boolean
+  stripe_customer_id?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_user" | "firstname" | "lastname" | "email" | "password" | "IsActive" | "otp" | "otpExpiry" | "resetToken" | "resetTokenExpiry", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id_user" | "firstname" | "lastname" | "email" | "password" | "IsActive" | "otp" | "otpExpiry" | "resetToken" | "resetTokenExpiry" | "stripe_customer_id", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   subscriptions?: boolean | Prisma.User$subscriptionsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -634,6 +664,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     otpExpiry: Date | null
     resetToken: string | null
     resetTokenExpiry: Date | null
+    stripe_customer_id: string | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1068,6 +1099,7 @@ export interface UserFieldRefs {
   readonly otpExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly resetToken: Prisma.FieldRef<"User", 'String'>
   readonly resetTokenExpiry: Prisma.FieldRef<"User", 'DateTime'>
+  readonly stripe_customer_id: Prisma.FieldRef<"User", 'String'>
 }
     
 

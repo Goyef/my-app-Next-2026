@@ -79,8 +79,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error('Erreur Stripe checkout:', error);
+    const message = error instanceof Error ? error.message : 'Erreur inconnue';
     return NextResponse.json(
-      { error: 'Erreur lors de la création de la session' },
+      { error: 'Erreur lors de la création de la session', details: message },
       { status: 500 }
     );
   }

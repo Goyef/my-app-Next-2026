@@ -1,6 +1,6 @@
-import { resend } from '@/lib/resend';
+import { sendEmail } from '@/lib/nodemailer';
+import { getPasswordResetEmailHTML } from '@/lib/email-templates';
 import { prisma } from '@/lib/prisma';
-import ForgetPasswordEmail from '@/components/emails/forgetPassword';
 import type { NextRequest } from 'next/server';
 import crypto from 'crypto';
 
@@ -38,31 +38,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL;
     const resetLink = `${baseUrl}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
-    // Envoyer l'email avec le lien de réinitialisation
-    const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+    // Envoyer l'email avec Nodemailer
+    await sendEmail({
       to: email,
       subject: 'Réinitialisation de votre mot de passe',
-      react: ForgetPasswordEmail({ 
-        resetLink,
-        expiresIn: 60 
-      }),
+      html: getPasswordResetEmailHTML(resetLink, 60),
     });
-
-    if (error) {
-      console.error("[PASSWORD-FORGOT] Erreur Resend:", {
-        error,
-        email,
-        timestamp: new Date().toISOString(),
-      });
-      return Response.json(
-        { error: true, message: "Échec de l'envoi de l'email" },
-        { status: 500 }
-      );
-    }
 
     console.log("[PASSWORD-FORGOT] Email envoyé avec succès:", {
       email,

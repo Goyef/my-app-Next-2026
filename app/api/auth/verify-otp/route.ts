@@ -69,8 +69,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // TODO: Créer une session ou un token JWT ici
-    // Pour l'instant on retourne juste un succès
+
 
     return Response.json({
       error: false,

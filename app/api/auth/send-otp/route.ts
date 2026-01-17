@@ -1,6 +1,6 @@
-import { resend } from '@/lib/resend';
+import { sendEmail } from '@/lib/nodemailer';
+import { getOTPEmailHTML } from '@/lib/email-templates';
 import { prisma } from '@/lib/prisma';
-import OTPEmail from '@/components/emails/otp';
 import type { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -26,22 +26,16 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Domaine vérifié ou
+    // Envoyer l'email avec Nodemailer
+    await sendEmail({
       to: email,
       subject: `Code de vérification : ${otp}`,
-      react: OTPEmail({ otp, expiresIn: 10 }),
+      html: getOTPEmailHTML(otp, 10),
     });
-
-    if (error) {
-      console.error("Erreur Resend:", error);
-      return Response.json({ error: true, message: "Failed to send OTP" }, { status: 500 });
-    }
 
     return Response.json({
       error: false,
       message: "OTP sent to email",
-      // otp: otp, // Décommenter pour tester en dev
     });
 
   } catch (error) {

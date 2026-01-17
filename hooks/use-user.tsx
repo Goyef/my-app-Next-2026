@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 export interface User {
   id: string
@@ -9,58 +9,39 @@ export interface User {
   lastname: string
 }
 
-interface UserContextType {
-  user: User | null
-  setUser: (user: User | null) => void
-  isLoading: boolean
-  logout: () => void
-}
-
-const UserContext = createContext<UserContextType | undefined>(undefined)
-
-const USER_STORAGE_KEY = "auth_user"
-
-export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUserState] = useState<User | null>(null)
+export function useUser() {
+  const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Charger l'utilisateur depuis le localStorage au démarrage
-  useEffect(() => {
-    const storedUser = localStorage.getItem(USER_STORAGE_KEY)
-    if (storedUser) {
-      try {
-        setUserState(JSON.parse(storedUser))
-      } catch (e) {
-        localStorage.removeItem(USER_STORAGE_KEY)
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await fetch("/api/auth/me", { credentials: "include" })
+      const data = await res.json()
+      if (!data.error && data.user) {
+        setUser(data.user)
+      } else {
+        setUser(null)
       }
+    } catch {
+      setUser(null)
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }, [])
 
-  const setUser = (newUser: User | null) => {
-    setUserState(newUser)
-    if (newUser) {
-      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser))
-    } else {
-      localStorage.removeItem(USER_STORAGE_KEY)
-    }
-  }
+  useEffect(() => {
+    fetchUser()
+  }, [fetchUser])
 
-  const logout = () => {
+  const logout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" })
     setUser(null)
   }
 
-  return (
-    <UserContext.Provider value={{ user, setUser, isLoading, logout }}>
-      {children}
-    </UserContext.Provider>
-  )
-}
-
-export function useUser() {
-  const context = useContext(UserContext)
-  if (context === undefined) {
-    throw new Error("useUser must be used within a UserProvider")
+  const refreshUser = async () => {
+    setIsLoading(true)
+    await fetchUser()
   }
-  return context
+
+  return { user, isLoading, logout, refreshUser, setUser }
 }

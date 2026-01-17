@@ -1,16 +1,45 @@
 "use client"
 
 import { User } from "@deemlol/next-icons";
-import { useUser } from "@/hooks/use-user";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+interface UserData {
+  id: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+}
 
 export default function Header() {
-  const { user, isLoading, logout } = useUser();
   const router = useRouter();
+  const [user, setUser] = useState<UserData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleLogout = () => {
-    logout();
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const data = await res.json();
+        if (!data.error && data.user) {
+          setUser(data.user);
+        } else {
+          setUser(null);
+        }
+      } catch {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    setUser(null);
     router.push("/login");
+    router.refresh();
   };
 
   return (

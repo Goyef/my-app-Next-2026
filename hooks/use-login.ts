@@ -1,13 +1,11 @@
 "use client"
 import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useUser } from "@/hooks/use-user"
 
 export function useLogin() {
 
     const router = useRouter()
     const searchParams = useSearchParams()
-    const { setUser } = useUser()
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -31,15 +29,11 @@ export function useLogin() {
             if (!res.ok || data.error) {
                 setError(data.message || 'Login failed')
             } else {
-                setUser({
-                    id: data.data.id,
-                    email: data.data.email,
-                    firstname: data.data.firstname,
-                    lastname: data.data.lastname,
-                })
+                // Le JWT est stocké dans le cookie par le serveur
                 // Rediriger vers l'URL d'origine ou la landing page
                 const redirectUrl = searchParams.get('redirect') || '/landing-page'
                 router.push(redirectUrl)
+                router.refresh()
             }
         } catch (err) {
             setError('Network error')

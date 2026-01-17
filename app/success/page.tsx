@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 
-export default function SuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const userId = searchParams.get('userId'); // Assurez-vous de passer userId en paramètre
@@ -87,5 +87,19 @@ export default function SuccessPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="container mx-auto py-20 text-center">
+        <h1 className="text-4xl font-bold text-blue-600 mb-4">
+          ⏳ Chargement...
+        </h1>
+      </div>
+    }>
+      <SuccessContent />
+    </Suspense>
   );
 }

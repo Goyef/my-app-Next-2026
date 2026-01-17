@@ -2,7 +2,9 @@ import { ILogin } from "@/app/interfaces/user";
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { ArgonVerify } from "@/lib/argon2i";
-import { MLogin } from "@/app/middleware/login"; 
+import { MLogin } from "@/app/middleware/login";
+import { SignJWT } from "jose";
+import { cookies } from "next/headers"; 
 
 export async function POST(req: NextRequest) {
     const { email, password }: ILogin = await req.json()
@@ -46,6 +48,29 @@ export async function POST(req: NextRequest) {
 
         console.log("Mot de passe vérifié avec succès")
         console.log("Connexion réussie pour l'utilisateur:", user.email)
+
+        // --- LOGIQUE JWT ---
+        const secret = new TextEncoder().encode(
+            process.env.JWT_SECRET 
+        );
+
+        const token = await new SignJWT({ 
+            id_user: user.id_user, 
+            email: user.email 
+        })
+            .setProtectedHeader({ alg: "HS256" })
+            .setIssuedAt()
+            .setExpirationTime("15m")
+            .sign(secret);
+
+        const cookieStore = await cookies();
+        cookieStore.set("auth_token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 60 * 15, // 15 minutes en secondes
+        });
 
         return NextResponse.json({
             error: false,

@@ -1,23 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { resend } from '@/lib/resend';
+import { sendEmail } from '@/lib/nodemailer';
 
 export async function POST(request: NextRequest) {
   try {
     const { to, subject, html } = await request.json();
 
-    const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Domaine vérifié ou onboarding@resend.dev
-      to: to,
-      subject: subject,
-      html: html,
+    await sendEmail({
+      to,
+      subject,
+      html,
     });
 
-    if (error) {
-      console.error('Erreur Resend:', error);
-      return NextResponse.json({ error: error.message }, { status: 400 });
-    }
-
-    return NextResponse.json({ success: true, id: data?.id });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Erreur envoi email:', error);
     return NextResponse.json(

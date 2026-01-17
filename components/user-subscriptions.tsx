@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { useUser } from "@/hooks/use-user"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { CalendarDays, Crown } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { CalendarDays, Crown, FileText } from "lucide-react"
 
 interface Subscription {
   id_subscription: string
@@ -160,6 +161,14 @@ export function UserSubscriptions() {
                         }}
                       />
                     </div>
+                  </div>
+                  <div className="pt-3">
+                    <Button variant="outline" size="sm" className="w-full" asChild>
+                      <a href="/factures">
+                        <FileText className="h-4 w-4 mr-2" />
+                        Voir mes factures
+                      </a>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>

@@ -26,6 +26,7 @@ model User {
   otpExpiry DateTime?
   resetToken String?
   resetTokenExpiry DateTime?
+  stripe_customer_id String? @unique
   subscriptions Subscription[]
 }
 

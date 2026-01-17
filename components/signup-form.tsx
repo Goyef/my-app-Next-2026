@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -16,125 +15,25 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { useSignup } from "@/hooks/use-signup"
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
-    const fieldName = id === "firstName" ? "firstname" : 
-                      id === "lastName" ? "lastname" : 
-                      id === "confirm-password" ? "confirmPassword" : id
-    setFormData(prev => ({
-      ...prev,
-      [fieldName]: value
-    }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-
-    console.log("[SignupForm] handleSubmit called", formData)
-
-    if (formData.password !== formData.confirmPassword) {
-        setError("Les mots de passe ne correspondent pas.")
-        setLoading(false)
-        return;
-    }
-
-    try {
-      console.log("[SignupForm] sending POST to /api/auth/register")
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstname: formData.firstname,
-          lastname: formData.lastname,
-          email: formData.email,
-          password: formData.password,
-          }),
-      })
-
-      console.log("[SignupForm] received response", response)
-
-      // Try to parse JSON even when response is not ok to get error details
-      let result: any = null
-      try {
-        result = await response.json()
-      } catch (e) {
-        result = { message: await response.text().catch(() => "<non-json response>") }
-      }
-
-      if (!response.ok) {
-        console.error("[SignupForm] server responded with error", response.status, result)
-        if (Array.isArray(result)) {
-          setError(result.map((r: any) => r.message || JSON.stringify(r)).join(', '))
-        } else {
-          setError(result?.message || `Server error ${response.status}`)
-        }
-        setSuccess(false)
-        return
-      }
-
-      const data = result
-
-      if (data?.error) {
-        // server can return an errors array or a message
-        if (Array.isArray(data.errors)) {
-          setError(data.errors.map((e: any) => e.message).join(', '))
-        } else {
-          setError(data.message || "Échec de l'inscription")
-        }
-        setSuccess(false)
-      } else {
-        setSuccess(true)
-        setFormData({
-          firstname: "",
-          lastname: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        })
-        // redirect to login after short delay
-        setTimeout(() => {
-          window.location.href = "/login"
-        }, 700)
-      }
-    } catch (err) {
-      console.error("[SignupForm] fetch error", err)
-      setError("Une erreur est survenue. Veuillez réessayer.")
-      setSuccess(false)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { loading, error, success, formData, handleInputChange, handleSubmit } = useSignup()
 
   return (
     <Card {...props}>
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
+        <CardTitle>Créer un compte</CardTitle>
         <CardDescription>
-          Enter your information below to create your account
+          Entrez vos informations pour créer un nouveau compte.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit}>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="firstName">First Name</FieldLabel>
+              <FieldLabel htmlFor="firstName">Prénom</FieldLabel>
               <Input 
                 id="firstName" 
                 type="text" 
@@ -145,7 +44,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               />
             </Field>
              <Field>
-              <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
+              <FieldLabel htmlFor="lastName">Nom de famille</FieldLabel>
               <Input 
                 id="lastName" 
                 type="text" 
@@ -166,12 +65,11 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 onChange={handleInputChange}
               />
               <FieldDescription>
-                We&apos;ll use this to contact you. We will not share your email
-                with anyone else.
+                Nous utiliserons cet email pour vous contacter. Nous ne partagerons pas votre email avec qui que ce soit.
               </FieldDescription>
             </Field>
             <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
+              <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
               <Input 
                 id="password" 
                 type="password" 
@@ -180,12 +78,12 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 onChange={handleInputChange}
               />
               <FieldDescription>
-                Must be at least 8 characters long.
+                Doit contenir au moins 8 caractères.
               </FieldDescription>
             </Field>
             <Field>
               <FieldLabel htmlFor="confirm-password">
-                Confirm Password
+                Confirmer le mot de passe
               </FieldLabel>
               <Input 
                 id="confirm-password" 
@@ -194,7 +92,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
               />
-              <FieldDescription>Please confirm your password.</FieldDescription>
+              <FieldDescription>Veuillez confirmer votre mot de passe.</FieldDescription>
             </Field>
             {error && (
               <div className="rounded-md bg-red-50 p-3 text-sm text-red-800">
@@ -203,7 +101,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
             )}
             {success && (
               <div className="rounded-md bg-green-50 p-3 text-sm text-green-800">
-                Account created successfully! Redirecting to login...
+                Compte créé avec succès ! Redirection vers la page de connexion...
               </div>
             )}
             <FieldGroup>
@@ -213,7 +111,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
                 </Button>
        
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="/otp">Sign in</a>
+                  Vous avez déjà un compte ? <a href="/otp">Se connecter</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

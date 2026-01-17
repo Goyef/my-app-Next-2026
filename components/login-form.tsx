@@ -15,33 +15,24 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { use, useEffect, useState } from "react"
+import { useLogin } from "@/hooks/use-login"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-
-  const [email, setEmail] = useState("");
-
-  const Change = (e : any) => {
-    setEmail(e.target.value);
-  }
-
-  useEffect(() => {
-    console.log(email);
-  }, [email]);
+  const { email, setEmail, handleSubmit, password, setPassword, loading, error } = useLogin()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Connectez vous à votre compte</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Entrez votre email ci-dessous pour vous connecter à votre compte
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -50,25 +41,34 @@ export function LoginForm({
                   type="email"
                   placeholder="m@example.com"
                   required
-                  onChange={Change}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Field>
               <Field>
                 <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
                   <a
-                    href="#"
+           
+                    href="/forgotPassword"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
-                    Forgot your password?
+                    Mot de passe oublié?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
               </Field>
+
+              {error && (
+                <Field>
+                  <FieldDescription className="text-center text-destructive">{error}</FieldDescription>
+                </Field>
+              )}
+
               <Field>
-                <Button type="submit" onClick={() => {document.location.href = "#"}}>Login</Button>
+                <Button type="submit" disabled={loading}>{loading ? 'Connexion en cours...' : 'Se connecter'}</Button>
                 <FieldDescription className="text-center">
-                  Don&apos;t have an account? <a href="/signup">Sign up</a>
+                  Vous n'avez pas de compte? <a href="/signup">S'inscrire</a>
                 </FieldDescription>
               </Field>
             </FieldGroup>

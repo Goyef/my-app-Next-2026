@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ModeToggle } from "@/components/theme-toggler"
+import { IdleTimer } from "@/components/auth/idle-timer"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -12,16 +13,12 @@ export const metadata: Metadata = {
 }
 
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-  <html lang="fr" suppressHydrationWarning={true}>
+    <html lang="fr" suppressHydrationWarning={true}>
       <body className={inter.className}>
-        {children}
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="system" >
+          <IdleTimer /> 
           <nav className="pt-2 px-4 flex justify-end">
             <ModeToggle />
           </nav>
@@ -29,5 +26,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

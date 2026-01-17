@@ -1,11 +1,13 @@
 "use client"
-
+import { CheckoutButton } from '@/components/checkout-button';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2 } from "lucide-react"
+import { ArrowLeft, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import { cn } from "@/lib/utils"
+import { ProtectedRoute } from "@/components/protected-route"
+import Link from 'next/link';
 
 type PricingSwitchProps = {
   onSwitch: (value: string) => void
@@ -21,6 +23,7 @@ type PricingCardProps = {
   actionLabel: string
   popular?: boolean
   exclusive?: boolean
+  priceId?: string
 }
 
 const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
@@ -35,19 +38,16 @@ const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
   <Tabs defaultValue="0" className="w-40 mx-auto" onValueChange={onSwitch}>
     <TabsList className="py-6 px-2">
       <TabsTrigger value="0" className="text-base">
-        Monthly
-      </TabsTrigger>
-      <TabsTrigger value="1" className="text-base">
-        Yearly
+        Par mois
       </TabsTrigger>
     </TabsList>
   </Tabs>
 )
 
-const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, actionLabel, popular, exclusive }: PricingCardProps) => (
+const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, actionLabel, popular, exclusive, priceId }: PricingCardProps) => (
   <Card
     className={cn(`w-72 flex flex-col justify-between py-1 ${popular ? "border-rose-400" : "border-zinc-700"} mx-auto sm:mx-0`, {
-      "animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors":
+      "animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-size-[200%_100%] transition-colors":
         exclusive,
     })}>
     <div>
@@ -57,7 +57,7 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
             <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{title}</CardTitle>
             <div
               className={cn("px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white", {
-                "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ": popular,
+                "bg-linear-to-r from-orange-400 to-rose-400 dark:text-black ": popular,
               })}>
               Save ${monthlyPrice * 12 - yearlyPrice}
             </div>
@@ -78,10 +78,14 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
       </CardContent>
     </div>
     <CardFooter className="mt-2">
-      <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-        <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
-        {actionLabel}
-      </Button>
+      {priceId ? (
+        <CheckoutButton priceId={priceId} />
+      ) : (
+        <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+          <div className="absolute -inset-0.5 -z-10 rounded-lg bg-linear-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
+          {actionLabel}
+        </Button>
+      )}
     </CardFooter>
   </Card>
 )
@@ -102,37 +106,48 @@ export default function page() {
       title: "Basic",
       monthlyPrice: 10,
       yearlyPrice: 100,
-      description: "Essential features you need to get started",
+      description: "Fonctionnalités essentielles pour commencer",
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3"],
-      actionLabel: "Get Started",
+      actionLabel: "Commencez",
+      priceId: "price_1SpS5LFXIS2IIz5emWEx1QxS", 
     },
     {
-      title: "Pro",
+      title: "Premium",
       monthlyPrice: 25,
       yearlyPrice: 250,
-      description: "Perfect for owners of small & medium businessess",
+      description: "Parfait pour les propriétaires de petites et moyennes entreprises",
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3"],
-      actionLabel: "Get Started",
+      actionLabel: "Commencez",
       popular: true,
+      priceId: "price_1SpS6KFXIS2IIz5e3wmLjhWp", 
     },
     {
-      title: "Enterprise",
-      price: "Custom",
-      description: "Dedicated support and infrastructure to fit your needs",
+      title: "Entreprise",
+      price: "Customisable",
+      description: "Des solutions sur mesure pour les grandes entreprises",
       features: ["Example Feature Number 1", "Example Feature Number 2", "Example Feature Number 3", "Super Exclusive Feature"],
-      actionLabel: "Contact Sales",
+      actionLabel: "En cours de développement",
       exclusive: true,
+      // Pas de priceId pour Entreprise (contact sales)
     },
   ]
   return (
-    <div className="py-8">
-      <PricingHeader title="Pricing Plans" subtitle="Choose the plan that's right for you" />
-      <PricingSwitch onSwitch={togglePricingPeriod} />
-      <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
-        {plans.map((plan) => {
-          return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
-        })}
-      </section>
-    </div>
+    <ProtectedRoute>
+      <div className="py-8">
+          <Button variant="ghost" size="sm" asChild className="mb-4">
+              <Link href="/landing-page">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour à l'accueil
+              </Link>
+            </Button>
+        <PricingHeader title="Abonnements" subtitle="Choisissez votre abonnement" />
+        <PricingSwitch onSwitch={togglePricingPeriod} />
+        <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
+          {plans.map((plan) => {
+            return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
+          })}
+        </section>
+      </div>
+    </ProtectedRoute>
   )
 }

@@ -1,11 +1,12 @@
 "use client"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useUser } from "@/hooks/use-user"
 
 export function useLogin() {
 
     const router = useRouter()
+    const searchParams = useSearchParams()
     const { setUser } = useUser()
 
     const [email, setEmail] = useState("");
@@ -36,7 +37,9 @@ export function useLogin() {
                     firstname: data.data.firstname,
                     lastname: data.data.lastname,
                 })
-                router.push('/landing-page')
+                // Rediriger vers l'URL d'origine ou la landing page
+                const redirectUrl = searchParams.get('redirect') || '/landing-page'
+                router.push(redirectUrl)
             }
         } catch (err) {
             setError('Network error')
